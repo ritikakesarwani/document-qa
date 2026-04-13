@@ -48,7 +48,7 @@ DocuQuery is a **fully local** Retrieval-Augmented Generation (RAG) system. Uplo
 
 | Upload Screen | Q&A in Action |
 |:---:|:---:|
-| ![Upload](docs/screenshot_upload.png) | ![QA](docs/screenshot_qa.png) |
+| ![Terminal](images/terminal.png)| ![Output](images/output.png)|
 
 > **Video demo:** See [`docs/demo.mp4`](docs/demo.mp4) for a full walkthrough.
 
