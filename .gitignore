@@ -1,0 +1,94 @@
+# ==========================================
+# Document Q&A System — .gitignore
+# ==========================================
+
+# ----- Python -----
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyo
+*.pyd
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# ----- Virtual Environments -----
+venv/
+.venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+.env
+
+# ----- Project-specific venv (Windows) -----
+Scripts/
+Lib/
+pyvenv.cfg
+
+# ----- Flask / App Specific -----
+instance/
+.webassets-cache
+uploads/
+*.db
+*.sqlite3
+
+# ----- ML Models & Cache -----
+models/
+*.pt
+*.pth
+*.bin
+*.safetensors
+.cache/
+huggingface/
+
+# ----- Jupyter Notebooks -----
+.ipynb_checkpoints
+*.ipynb
+
+# ----- IDE / Editors -----
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# ----- OS -----
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Desktop.ini
+
+# ----- Testing -----
+.tox/
+.coverage
+.coverage.*
+htmlcov/
+.pytest_cache/
+*.log
+
+# ----- Secrets -----
+.env
+.env.local
+.env.*.local
+secrets.json
+config.local.py

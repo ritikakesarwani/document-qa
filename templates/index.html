@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Upload any PDF and get instant, AI-powered answers — fully offline, no API keys required." />
+  <title>DocuQuery — Local Document Q&A</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/static/css/style.css" />
+</head>
+<body>
+
+  <!-- Background Orbs -->
+  <div class="bg-orb orb-1" aria-hidden="true"></div>
+  <div class="bg-orb orb-2" aria-hidden="true"></div>
+  <div class="bg-orb orb-3" aria-hidden="true"></div>
+
+  <div class="app-container">
+
+    <!-- ── Header ── -->
+    <header class="app-header">
+      <div class="logo">
+        <div class="logo-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+            <polyline points="14,2 14,8 20,8"/>
+            <line x1="16" y1="13" x2="8" y2="13"/>
+            <line x1="16" y1="17" x2="8" y2="17"/>
+            <polyline points="10,9 9,9 8,9"/>
+          </svg>
+        </div>
+        <div class="logo-text">
+          <span class="logo-name">DocuQuery</span>
+          <span class="logo-tagline">Local Document Intelligence</span>
+        </div>
+      </div>
+      <div class="header-badges">
+        <span class="badge badge-offline">
+          <span class="badge-dot"></span>
+          100% Offline
+        </span>
+        <span class="badge badge-model">FLAN-T5 · MiniLM</span>
+      </div>
+    </header>
+
+    <!-- ── Main Layout ── -->
+    <main class="main-layout">
+
+      <!-- ── Left Panel: Upload ── -->
+      <aside class="panel upload-panel" id="upload-panel">
+        <div class="panel-header">
+          <h2 class="panel-title">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/>
+              <path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/>
+            </svg>
+            Upload Document
+          </h2>
+        </div>
+
+        <!-- Drop Zone -->
+        <div
+          class="drop-zone"
+          id="drop-zone"
+          role="button"
+          tabindex="0"
+          aria-label="Upload PDF: click or drag and drop"
+        >
+          <div class="drop-zone-inner">
+            <div class="drop-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                <polyline points="14,2 14,8 20,8"/>
+              </svg>
+            </div>
+            <p class="drop-title">Drop your PDF here</p>
+            <p class="drop-subtitle">or <button class="link-btn" id="browse-btn">browse files</button></p>
+            <p class="drop-hint">PDF files up to 50 MB</p>
+          </div>
+          <input type="file" id="file-input" accept=".pdf" hidden aria-label="File input" />
+        </div>
+
+        <!-- Upload Progress -->
+        <div class="upload-progress hidden" id="upload-progress">
+          <div class="progress-header">
+            <span id="progress-filename" class="progress-filename"></span>
+            <span id="progress-status" class="progress-status">Processing…</span>
+          </div>
+          <div class="progress-bar-track">
+            <div class="progress-bar-fill" id="progress-bar"></div>
+          </div>
+        </div>
+
+        <!-- Document Info Card -->
+        <div class="doc-card hidden" id="doc-card">
+          <div class="doc-card-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+              <polyline points="14,2 14,8 20,8"/>
+            </svg>
+          </div>
+          <div class="doc-card-info">
+            <p class="doc-card-name" id="doc-card-name"></p>
+            <p class="doc-card-meta" id="doc-card-meta"></p>
+          </div>
+          <button class="doc-card-remove" id="remove-doc-btn" title="Remove document" aria-label="Remove document">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+            </svg>
+          </button>
+        </div>
+
+        <!-- How It Works -->
+        <div class="how-it-works">
+          <h3 class="how-title">How it works</h3>
+          <ol class="steps-list">
+            <li class="step">
+              <div class="step-num">1</div>
+              <div class="step-body">
+                <strong>Upload</strong>
+                <span>Your PDF is parsed and split into chunks locally.</span>
+              </div>
+            </li>
+            <li class="step">
+              <div class="step-num">2</div>
+              <div class="step-body">
+                <strong>Embed</strong>
+                <span>Each chunk is embedded with MiniLM into a FAISS vector index.</span>
+              </div>
+            </li>
+            <li class="step">
+              <div class="step-num">3</div>
+              <div class="step-body">
+                <strong>Retrieve</strong>
+                <span>Your question is matched against the most relevant chunks.</span>
+              </div>
+            </li>
+            <li class="step">
+              <div class="step-num">4</div>
+              <div class="step-body">
+                <strong>Answer</strong>
+                <span>FLAN-T5 generates a grounded answer — no hallucination without context.</span>
+              </div>
+            </li>
+          </ol>
+        </div>
+      </aside>
+
+      <!-- ── Right Panel: Q&A ── -->
+      <section class="panel chat-panel" id="chat-panel" aria-label="Question and Answer">
+
+        <!-- Empty State -->
+        <div class="empty-state" id="empty-state">
+          <div class="empty-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2">
+              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+            </svg>
+          </div>
+          <h2 class="empty-title">Ask anything about your document</h2>
+          <p class="empty-desc">Upload a PDF on the left to get started. All processing happens on your machine — no data ever leaves your device.</p>
+          <div class="example-questions" aria-label="Example questions">
+            <p class="examples-label">Example questions you can ask:</p>
+            <div class="examples-list">
+              <button class="example-chip" onclick="setExampleQuestion(this)">What is the main topic of this document?</button>
+              <button class="example-chip" onclick="setExampleQuestion(this)">Summarize the key findings.</button>
+              <button class="example-chip" onclick="setExampleQuestion(this)">What conclusions are drawn?</button>
+              <button class="example-chip" onclick="setExampleQuestion(this)">List the important dates mentioned.</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Chat Messages -->
+        <div class="chat-messages hidden" id="chat-messages" role="log" aria-live="polite" aria-label="Chat messages">
+        </div>
+
+        <!-- Input Bar -->
+        <div class="chat-input-bar" id="chat-input-bar">
+          <div class="input-wrapper">
+            <textarea
+              id="question-input"
+              class="question-textarea"
+              placeholder="Ask a question about your document…"
+              rows="1"
+              disabled
+              aria-label="Question input"
+              aria-describedby="send-btn"
+            ></textarea>
+            <button
+              id="send-btn"
+              class="send-btn"
+              disabled
+              aria-label="Send question"
+              title="Send (Enter)"
+            >
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="22" y1="2" x2="11" y2="13"/>
+                <polygon points="22,2 15,22 11,13 2,9"/>
+              </svg>
+            </button>
+          </div>
+          <p class="input-hint">Press <kbd>Enter</kbd> to send · <kbd>Shift+Enter</kbd> for new line</p>
+        </div>
+
+      </section>
+    </main>
+
+  </div>
+
+  <script src="/static/js/main.js"></script>
+</body>
+</html>
